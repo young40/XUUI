@@ -39,7 +39,7 @@ local function loadmodule(options, exports, app_name, name, do_not_load_data)
     }))
     local m = func()
     exports[name] = m.exports
-    if not do_not_load_data then 
+    if not do_not_load_data then
         options.data[name] = m.data
     end
     if m.commands then
@@ -64,7 +64,7 @@ end
 
 local function app_init(options)
     local app_name = assert(options.name, 'app name require')
-    
+
     for _, module_name in ipairs(options.modules or {}) do
         loadmodule(options, options.exports, app_name, module_name)
     end
@@ -83,21 +83,21 @@ local function new(options)
     options.computed[0] = {}
     options.commands = options.commands or {}
     options.exports = {}
-    
+
     if options.modules then
         app_init(options)
     end
 
     local observe = observeable.new(options.data)
-    
+
     local function attach(el)
         return binding.bind(options.data, observe, options.computed, options.commands, el)
     end
-    
+
     local function reload(module_name, reload_data)
         loadmodule(options, options.exports, options.name, module_name, not reload_data)
     end
-    
+
     return attach, reload
 end
 

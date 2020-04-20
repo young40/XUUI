@@ -18,20 +18,20 @@ local function listen_to(data, observe, computed, el, cbs, ccbs)
     if is_computed or is_computed_bind then
         local watched = {}
         local to_watch = {}
-        
+
         local function read_watch(path)
             if not watched[path] then
                 table.insert(to_watch, path)
                 watched[path] = true
             end
         end
-        
+
         local compiled
-        
+
         if is_computed_bind then
             compiled = compile_template(bind_to)
         end
-        
+
         local function set_and_watch()
             local tmpdata = (is_computed and module_name) and data[module_name] or data
             local get = is_computed_bind and compiled or computed[bind_to]
@@ -40,7 +40,7 @@ local function listen_to(data, observe, computed, el, cbs, ccbs)
             observe:read_report()
             --print('computed', bind_to, value)
             el.Value = value
-            
+
             if #to_watch > 0 then
                 for _, path in ipairs(to_watch) do
                     table.insert(cbs, observe:watch(path, set_and_watch))
@@ -48,14 +48,14 @@ local function listen_to(data, observe, computed, el, cbs, ccbs)
                 to_watch = {}
             end
         end
-        
+
         if module_name and not is_computed_bind then
             table.insert(ccbs, set_and_watch)
             local computed_watchs = computed[0]
             computed_watchs[bind_to] = computed_watchs[bind_to] or {}
             computed_watchs[bind_to][set_and_watch] = true
         end
-        
+
         set_and_watch()
     else
         el.Value = observeable.raw(observe:getter(bind_to)(data))
@@ -101,15 +101,15 @@ function _M.bind(data, observe, computed, commands, root)
     for _, obj in ipairs(bindings[1]) do
         listen_to(data, observe, computed, obj, cbs, ccbs)
     end
-    
+
     for _, obj in ipairs(bindings[2]) do
         watch_to(data, observe, obj)
     end
-    
+
     for _, obj in ipairs(bindings[3]) do
         bind_action(data, commands, obj)
     end
-    
+
     local function detach()
         for _, cb in ipairs(cbs) do
             observe:unwatch(cb)
