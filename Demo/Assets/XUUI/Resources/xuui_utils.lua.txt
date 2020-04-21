@@ -1,6 +1,7 @@
 local setmetatable, getmetatable, rawset, rawget, pairs, type, ipairs = setmetatable, getmetatable, rawset, rawget, pairs, type, ipairs
 local insert = table.insert
 local find, format, sub, gsub = string.find, string.format, string.sub, string.gsub
+local dump = require 'dump'
 
 local function parse_path(path)
     if not path or path == '' then error('invalid path:' .. tostring(path)) end

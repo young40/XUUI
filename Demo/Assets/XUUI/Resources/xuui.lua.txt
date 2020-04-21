@@ -1,5 +1,6 @@
 local observeable = require 'observeable'
 local binding =  require 'binding'
+local dump = require 'dump'
 
 local _M = {}
 

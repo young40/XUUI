@@ -1,5 +1,6 @@
 local collector = require 'collector'
 local observeable = require 'observeable'
+local dump = require 'dump'
 
 local _M = {}
 
